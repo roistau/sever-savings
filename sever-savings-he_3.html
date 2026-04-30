@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>החיסכון של סבר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F7F5F0; --gold: #C9A84C; --gold-light: #E8D5A3; --gold-dark: #8B6914;
+    --forest: #1E3D0F; --forest-mid: #2D5A17; --forest-light: #5A9E35;
+    --ink: #1A1A14; --ink-light: #7A7A5E; --danger: #8B2020;
+    --card: #ffffff; --border: #E2DDD0;
+    --pink: #F2A7C3; --pink-dark: #C4527A;
+  }
+  body { font-family: 'Heebo', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; direction: rtl; }
+  .main-container { max-width: 640px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* HERO */
+  .hero { background: var(--forest); border-radius: 20px; padding: 28px 28px 24px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); }
+  .hero-content { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+  .hero-text { flex: 1; }
+  .hero h1 { font-size: 28px; font-weight: 700; color: white; line-height: 1.2; }
+  .hero h1 span { color: var(--gold); font-weight: 300; display: block; font-size: 18px; margin-top: 3px; }
+  .hero-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; font-weight: 300; }
+  .hero-divider { height: 0.5px; background: rgba(201,168,76,0.25); margin: 16px 0 14px; position: relative; z-index: 1; }
+  .hero-goal-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+  .hero-goal-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .hero-goal-value { font-size: 13px; color: var(--gold-light); font-weight: 500; }
+
+  /* PIGGY SVG */
+  .piggy-wrap { flex-shrink: 0; width: 120px; height: 140px; position: relative; }
+  .piggy-wrap svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+  .coin-anim {
+    animation: coinfall 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    transform-origin: center;
+  }
+  @keyframes coinfall {
+    0%   { opacity: 0; transform: translateY(-18px) scaleX(1); }
+    10%  { opacity: 1; transform: translateY(-12px) scaleX(0.7); }
+    30%  { opacity: 1; transform: translateY(-4px) scaleX(1); }
+    50%  { opacity: 1; transform: translateY(2px) scaleX(0.6); }
+    65%  { opacity: 0.6; transform: translateY(6px) scaleX(0.15); }
+    75%  { opacity: 0; transform: translateY(8px) scaleX(0.05); }
+    76%  { opacity: 0; transform: translateY(-18px) scaleX(1); }
+    100% { opacity: 0; transform: translateY(-18px) scaleX(1); }
+  }
+
+  /* HEALTH BANNER */
+  .health-banner {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .health-icon-wrap { flex-shrink: 0; }
+  .health-text { flex: 1; }
+  .health-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .health-sub { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+  .health-badge { background: #EAF5E1; color: var(--forest-mid); font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+
+  /* METRICS */
+  .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 12px; text-align: center; }
+  .metric-card.primary { background: var(--forest); border-color: var(--forest); }
+  .metric-label { font-size: 10px; font-weight: 500; color: var(--ink-light); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric-card.primary .metric-label { color: rgba(255,255,255,0.5); }
+  .metric-value { font-size: 24px; font-weight: 700; color: var(--ink); }
+  .metric-card.primary .metric-value { color: var(--gold); }
+
+  /* PROGRESS */
+  .progress-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .progress-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .progress-pct { font-size: 20px; font-weight: 700; color: var(--forest-mid); }
+  .progress-track { height: 10px; background: var(--cream); border-radius: 999px; overflow: hidden; margin-bottom: 10px; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; background: linear-gradient(270deg, var(--forest-light), var(--forest)); border-radius: 999px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .progress-msg { font-size: 12px; color: var(--ink-light); }
+
+  /* FORM */
+  .form-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .form-row { display: flex; gap: 8px; }
+  input[type="text"], input[type="number"], select { font-family: 'Heebo', sans-serif; font-size: 14px; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; background: var(--cream); color: var(--ink); outline: none; transition: border-color 0.2s, box-shadow 0.2s; direction: rtl; }
+  input:focus, select:focus { border-color: var(--forest-light); box-shadow: 0 0 0 3px rgba(90,158,53,0.1); }
+  input[type="text"] { flex: 2; } input[type="number"] { flex: 1; min-width: 80px; }
+  .add-btn { font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 500; padding: 10px 20px; background: var(--forest); color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
+  .add-btn:hover { background: var(--forest-mid); } .add-btn:active { transform: scale(0.97); } .add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* LOG */
+  .log-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; }
+  .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  select { padding: 6px 10px; font-size: 13px; border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: right; font-size: 10px; font-weight: 500; color: var(--ink-light); border-bottom: 1px solid var(--border); padding: 0 8px 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 10px 8px; border-bottom: 1px solid #F5F3EE; color: var(--ink); vertical-align: middle; text-align: right; }
+  tr:last-child td { border-bottom: none; }
+  .del-btn { background: none; border: none; cursor: pointer; color: #C0B090; font-size: 13px; padding: 4px 8px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+  .del-btn:hover { color: var(--danger); background: #FDF0F0; }
+  .empty { text-align: center; padding: 32px 16px; color: var(--ink-light); font-size: 13px; }
+
+  /* CHART */
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+  .chart-wrap { position: relative; width: 100%; height: 200px; margin-top: 12px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--forest); color: white; font-size: 13px; padding: 12px 22px; border-radius: 12px; z-index: 200; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); white-space: nowrap; font-family: 'Heebo', sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="main-container">
+
+  <!-- HERO with PIGGY -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>החיסכון של סבר<span>כל שקל שנחסך — שווה</span></h1>
+        <p class="hero-sub">כל ויתור קטן מקרב אותנו לביטוח בריאות</p>
+      </div>
+      <!-- PIGGY BANK SVG -->
+      <div class="piggy-wrap">
+        <svg viewBox="0 0 140 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- TAIL (behind body) -->
+          <path d="M112 70 Q128 55 122 70 Q116 85 128 80" stroke="#E8809E" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <!-- BODY -->
+          <ellipse cx="72" cy="78" rx="45" ry="38" fill="#F2A7C3"/>
+          <!-- BELLY SHINE -->
+          <ellipse cx="65" cy="72" rx="20" ry="15" fill="rgba(255,255,255,0.22)"/>
+          <!-- COIN SLOT on back -->
+          <rect x="62" y="38" width="18" height="4" rx="2" fill="#C4527A"/>
+          <!-- COIN (animated) -->
+          <ellipse cx="71" cy="32" rx="8" ry="5" fill="#F0C040" class="coin-anim"/>
+          <!-- LEFT EAR (behind head) -->
+          <ellipse cx="30" cy="38" rx="11" ry="14" fill="#F2A7C3"/>
+          <ellipse cx="30" cy="38" rx="7" ry="9" fill="#E8809E"/>
+          <!-- RIGHT EAR -->
+          <ellipse cx="55" cy="34" rx="11" ry="14" fill="#F2A7C3"/>
+          <ellipse cx="55" cy="34" rx="7" ry="9" fill="#E8809E"/>
+          <!-- HEAD -->
+          <ellipse cx="42" cy="58" rx="28" ry="26" fill="#F2A7C3"/>
+          <!-- LEFT EYE -->
+          <circle cx="33" cy="50" r="5" fill="white"/>
+          <circle cx="33" cy="50" r="3" fill="#1A1A14"/>
+          <circle cx="34.2" cy="48.8" r="1.2" fill="white"/>
+          <!-- RIGHT EYE -->
+          <circle cx="52" cy="50" r="5" fill="white"/>
+          <circle cx="52" cy="50" r="3" fill="#1A1A14"/>
+          <circle cx="53.2" cy="48.8" r="1.2" fill="white"/>
+          <!-- EYEBROWS -->
+          <path d="M29 44 Q33 41 37 44" stroke="#C4527A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M48 44 Q52 41 56 44" stroke="#C4527A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- SNOUT -->
+          <ellipse cx="42" cy="67" rx="13" ry="10" fill="#E8809E"/>
+          <!-- NOSTRILS -->
+          <circle cx="37" cy="68" r="3" fill="#C4527A"/>
+          <circle cx="47" cy="68" r="3" fill="#C4527A"/>
+          <!-- SMILE -->
+          <path d="M32 75 Q42 82 52 75" stroke="#C4527A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- 4 LEGS -->
+          <rect x="40" y="108" width="14" height="18" rx="7" fill="#E8809E"/>
+          <rect x="58" y="108" width="14" height="18" rx="7" fill="#E8809E"/>
+          <rect x="76" y="108" width="14" height="18" rx="7" fill="#E8809E"/>
+          <rect x="94" y="108" width="14" height="18" rx="7" fill="#E8809E"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-goal-row">
+      <span class="hero-goal-label">יעד חודשי</span>
+      <span class="hero-goal-value">$450 לחודש</span>
+    </div>
+  </div>
+
+  <!-- HEALTH INSURANCE BANNER -->
+  <div class="health-banner">
+    <div class="health-icon-wrap">
+      <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <!-- shield -->
+        <path d="M24 4 L40 10 L40 26 C40 36 32 43 24 46 C16 43 8 36 8 26 L8 10 Z" fill="#EAF5E1" stroke="#5A9E35" stroke-width="1.5"/>
+        <!-- cross -->
+        <rect x="20" y="16" width="8" height="20" rx="2" fill="#2D5A17"/>
+        <rect x="14" y="22" width="20" height="8" rx="2" fill="#2D5A17"/>
+        <!-- heart overlay -->
+        <path d="M24 38 C22 36 16 31 16 27 C16 24 18 22 21 22 C22.5 22 23.5 23 24 24 C24.5 23 25.5 22 27 22 C30 22 32 24 32 27 C32 31 26 36 24 38Z" fill="#5A9E35" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="health-text">
+      <div class="health-title">ביטוח בריאות — Aetna / Teva</div>
+      <div class="health-sub">חוסכים $450 בחודש לכיסוי פרמיית הביטוח</div>
+    </div>
+    <div class="health-badge">המטרה שלנו</div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric-card primary">
+      <div class="metric-label">נחסך</div>
+      <div class="metric-value" id="saved-val">$0</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">נותר</div>
+      <div class="metric-value" id="remaining-val">$450</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">רשומות</div>
+      <div class="metric-value" id="count-val">0</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <span class="progress-title">התקדמות חודשית</span>
+      <span class="progress-pct" id="pct-label">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-msg" id="progress-msg">כל ויתור קטן מקרב אותנו למטרה הגדולה.</div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="card-title">✍️ הוספת חיסכון</div>
+    <div class="form-row">
+      <input type="text" id="desc-input" placeholder="על מה ויתרת? (ארוחה, קניות...)" style="flex:2;" />
+      <input type="number" id="amt-input" placeholder="$" min="0.01" step="0.01" style="flex:1;min-width:80px;" />
+      <button class="add-btn" onclick="addEntry()" id="add-btn">+ הוסף</button>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div class="log-card">
+    <div class="log-header">
+      <div class="card-title" style="margin-bottom:0;">📋 פנקס החיסכונות</div>
+      <select id="month-select" onchange="render()"></select>
+    </div>
+    <div class="empty" id="empty-state">עוד אין רשומות — הוסיפי את הראשונה למעלה.</div>
+    <table id="log-table" style="display:none;">
+      <thead><tr><th></th><th style="text-align:left;">סכום</th><th>תיאור</th><th>תאריך</th></tr></thead>
+      <tbody id="log-body"></tbody>
+    </table>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="card-title">📊 סקירה חודשית</div>
+    <div class="chart-wrap">
+      <canvas id="overview-chart" role="img" aria-label="גרף חיסכון חודשי">חיסכון חודשי מול יעד $450.</canvas>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const GOAL = 450;
+const KEY = 'sever_savings_he_v1';
+let entries = (() => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } })();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(entries)); } catch(e) {} };
+const mKey = d => d.slice(0,7);
+const allMonths = () => { const s = new Set(entries.map(e => mKey(e.date))); s.add(new Date().toISOString().slice(0,7)); return [...s].sort().reverse(); };
+const fmtMonth = m => { const [y,mo] = m.split('-'); return new Date(+y,+mo-1,1).toLocaleString('he-IL',{month:'long',year:'numeric'}); };
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function addEntry() {
+  const desc = document.getElementById('desc-input').value.trim();
+  const amt = parseFloat(document.getElementById('amt-input').value);
+  if (!desc || isNaN(amt) || amt <= 0) { showToast('יש למלא את שני השדות.'); return; }
+  const btn = document.getElementById('add-btn');
+  btn.disabled = true; btn.textContent = 'שומר...';
+  entries.push({ id: Date.now(), date: new Date().toISOString().slice(0,10), desc, amt: Math.round(amt*100)/100 });
+  save();
+  document.getElementById('desc-input').value = '';
+  document.getElementById('amt-input').value = '';
+  btn.disabled = false; btn.textContent = '+ הוסף';
+  showToast('נרשם! כל הכבוד 💪');
+  render();
+}
+
+function deleteEntry(id) { entries = entries.filter(e => e.id !== id); save(); render(); }
+
+const msgs = [
+  p => p === 0 ? 'כל ויתור קטן מקרב אותנו למטרה הגדולה.' : null,
+  p => p > 0 && p < 25 ? 'התחלה טובה — המשיכי כך!' : null,
+  p => p >= 25 && p < 50 ? 'רבע מהדרך! עושה עבודה נהדרת.' : null,
+  p => p >= 50 && p < 75 ? 'אמצע הדרך — סבר גאה בך! 💚' : null,
+  p => p >= 75 && p < 100 ? 'כמעט שם — עוד קצת ומגיעים!' : null,
+  p => p >= 100 ? '🎉 היעד הושג! הביטוח מכוסה החודש!' : null,
+];
+
+let chart = null;
+
+function render() {
+  const months = allMonths();
+  const sel = document.getElementById('month-select');
+  const cur = sel.value;
+  sel.innerHTML = '';
+  months.forEach(m => { const o = document.createElement('option'); o.value = m; o.textContent = fmtMonth(m); sel.appendChild(o); });
+  if (cur && months.includes(cur)) sel.value = cur;
+
+  const month = sel.value;
+  const filtered = entries.filter(e => mKey(e.date) === month);
+  const total = Math.round(filtered.reduce((s,e) => s+e.amt, 0)*100)/100;
+  const remaining = Math.max(0, GOAL - total);
+  const pct = Math.min(100, Math.round((total/GOAL)*100));
+
+  document.getElementById('saved-val').textContent = '$' + total.toFixed(2);
+  document.getElementById('remaining-val').textContent = '$' + remaining.toFixed(2);
+  document.getElementById('count-val').textContent = filtered.length;
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-msg').textContent = msgs.map(fn => fn(pct)).find(m => m !== null) || '';
+
+  const tbody = document.getElementById('log-body');
+  tbody.innerHTML = '';
+  if (filtered.length === 0) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('log-table').style.display = 'none';
+  } else {
+    document.getElementById('empty-state').style.display = 'none';
+    document.getElementById('log-table').style.display = 'table';
+    [...filtered].reverse().forEach(e => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><button class="del-btn" onclick="deleteEntry(${e.id})">✕</button></td><td style="text-align:left;font-weight:700;color:#2D5A17;direction:ltr;">$${e.amt.toFixed(2)}</td><td>${e.desc}</td><td style="color:#7A7A5E;font-size:12px;direction:ltr;">${e.date}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  const cMonths = months.slice(0,6).reverse();
+  const totals = cMonths.map(m => Math.round(entries.filter(e => mKey(e.date)===m).reduce((s,e)=>s+e.amt,0)*100)/100);
+  const labels = cMonths.map(m => { const [y,mo] = m.split('-'); return new Date(+y,+mo-1,1).toLocaleString('he-IL',{month:'short'}); });
+
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('overview-chart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'נחסך', data: totals, backgroundColor: '#5A9E35', borderRadius: 6, borderSkipped: false },
+        { label: 'יעד', data: cMonths.map(()=>GOAL), type: 'line', borderColor: '#C9A84C', borderDash: [5,4], borderWidth: 2, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' $'+c.parsed.y.toFixed(2) } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { family: 'Heebo', size: 12 }, color: '#7A7A5E' }, border: { display: false } },
+        y: { beginAtZero: true, max: GOAL*1.3, ticks: { callback: v=>'$'+v, font: { family: 'Heebo', size: 11 }, color: '#7A7A5E', maxTicksLimit: 5 }, grid: { color: '#F5F3EE' }, border: { display: false } }
+      }
+    }
+  });
+}
+
+document.getElementById('desc-input').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('amt-input').focus(); });
+document.getElementById('amt-input').addEventListener('keydown', e => { if (e.key==='Enter') addEntry(); });
+render();
+</script>
+</body>
+</html>
